@@ -1,0 +1,14 @@
+<div class="input-group">
+  <label *ngIf="label" class="input-label">{{ label }}</label>
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+    [class.has-error]="!!error"
+    class="input-control"
+  />
+  <div *ngIf="error" class="input-error">{{ error }}</div>
+</div>

@@ -1,0 +1,13 @@
+<div class="layout-container">
+  <lib-sidebar class="sidebar"></lib-sidebar>
+  <div class="main-content">
+    <lib-header class="header"></lib-header>
+    <div class="content-area">
+      <router-outlet></router-outlet>
+      <div class="footer-actions">
+        <lib-button *ngIf="showBackButton$ | async" label="Back" (onClick)="onBack()" variant="secondary"></lib-button>
+        <lib-button *ngIf="showContinueButton$ | async" label="Continue" (onClick)="onContinue()"></lib-button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &-primary {
+    background-color: #007bff;
+    color: white;
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+  }
+
+  &-secondary {
+    background-color: #6c757d;
+    color: white;
+    &:hover:not(:disabled) {
+      background-color: #545b62;
+    }
+  }
+
+  &-outline {
+    background-color: transparent;
+    border-color: #007bff;
+    color: #007bff;
+    &:hover:not(:disabled) {
+      background-color: #007bff;
+      color: white;
+    }
+  }
+}

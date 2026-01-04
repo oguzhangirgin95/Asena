@@ -1,0 +1,6 @@
+<div class="key-value-list">
+  <div *ngFor="let item of items" class="key-value-item">
+    <span class="label">{{ item.label || item.key }}:</span>
+    <span class="value">{{ item.value }}</span>
+  </div>
+</div>

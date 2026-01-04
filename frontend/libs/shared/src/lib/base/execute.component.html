@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>Execute Result</h2>
+  
+  <div *ngIf="data" class="result-container">
+    <div class="status" [class.success]="data.success" [class.error]="!data.success">
+      {{ data.message }}
+    </div>
+
+    <div *ngIf="data.referenceNumber" class="reference">
+      Reference: {{ data.referenceNumber }}
+    </div>
+
+    <div *ngIf="data.details" class="details">
+      <lib-key-value-list [items]="data.details!"></lib-key-value-list>
+    </div>
+  </div>
+
+  <div class="actions">
+    <lib-button label="Close" (onClick)="onClose()"></lib-button>
+  </div>
+</div>

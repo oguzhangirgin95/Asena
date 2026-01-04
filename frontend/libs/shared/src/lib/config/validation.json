@@ -1,0 +1,18 @@
+{
+  "sampleField": {
+    "required": true,
+    "regex": "^[a-zA-Z]+$"
+  },
+  "email": {
+    "required": true,
+    "regex": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+  },
+  "iban": {
+    "required": true,
+    "regex": "^TR[0-9]{24}$"
+  },
+  "amount": {
+    "required": true,
+    "min": 1
+  }
+}

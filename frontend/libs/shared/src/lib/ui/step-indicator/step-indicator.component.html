@@ -1,0 +1,9 @@
+<div class="step-indicator-container" *ngIf="steps$ | async as steps">
+  <div class="step" 
+       *ngFor="let step of steps; let i = index"
+       [class.active]="(currentStepIndex$ | async) === i"
+       [class.completed]="(currentStepIndex$ | async)! > i">
+    <div class="circle">{{ i + 1 }}</div>
+    <span class="label">{{ step.step | titlecase }}</span>
+  </div>
+</div>

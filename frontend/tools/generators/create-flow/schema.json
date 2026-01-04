@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "create-flow",
+  "title": "Create Flow Generator",
+  "type": "object",
+  "properties": {
+    "module": {
+      "type": "string",
+      "description": "The name of the module",
+      "x-prompt": "What is the module name?"
+    },
+    "transaction": {
+      "type": "string",
+      "description": "The name of the transaction",
+      "x-prompt": "What is the transaction name?"
+    },
+    "onlyStart": {
+      "type": "boolean",
+      "description": "Generate only start step configuration",
+      "default": false
+    }
+  },
+  "required": ["module", "transaction"]
+}

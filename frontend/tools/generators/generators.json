@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "create-flow": {
+      "factory": "./create-flow/generator",
+      "schema": "./create-flow/schema.json",
+      "description": "Create a new flow"
+    }
+  }
+}

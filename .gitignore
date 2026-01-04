@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Node / Frontend
+node_modules/
+dist/
+coverage/
+.angular/
+.nx/
+
+# Java / Backend
+target/
+*.class
+.mvn/
+mvnw
+mvnw.cmd

@@ -1,0 +1,5 @@
+{
+  "name": "local-generators",
+  "version": "0.0.1",
+  "generators": "./generators.json"
+}

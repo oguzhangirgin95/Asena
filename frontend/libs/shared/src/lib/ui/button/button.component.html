@@ -1,0 +1,8 @@
+<button
+  [type]="type"
+  [disabled]="disabled"
+  [ngClass]="['btn', 'btn-' + variant]"
+  (click)="handleClick($event)"
+>
+  {{ label }}
+</button>

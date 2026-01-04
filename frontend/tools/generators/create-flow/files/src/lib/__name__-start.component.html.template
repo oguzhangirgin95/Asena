@@ -1,0 +1,4 @@
+<div class="container">
+  <h2><%= className %> Start</h2>
+  <!-- Add your start logic here -->
+</div>
