@@ -1,4 +1,4 @@
-<div class="layout-container">
+<div *ngIf="!(disableLayout$ | async)" class="layout-container">
   <lib-sidebar *ngIf="showLayout" class="sidebar"></lib-sidebar>
   <div class="main-content">
     <lib-header *ngIf="showLayout" class="header"></lib-header>
@@ -10,4 +10,7 @@
       </div>
     </div>
   </div>
+</div>
+<div *ngIf="disableLayout$ | async">
+  <router-outlet></router-outlet>
 </div>

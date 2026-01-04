@@ -14,6 +14,7 @@ export interface ValidationConfig {
 export interface ValidationRuleConfig {
   id: string;
   validatorType: string;
+  customValidation?: (value: unknown, element?: HTMLInputElement) => boolean;
   validationMessage: string;
 }
 
@@ -48,22 +49,52 @@ export class ValidationService {
     // 2. Config-based validation
     if (this.currentRules.length > 0) {
       let isStepValid = true;
+      const rulesById = new Map<string, ValidationRuleConfig[]>();
       for (const rule of this.currentRules) {
-        const element = document.getElementById(rule.id) as HTMLInputElement;
-        if (element) {
-           const value = element.value;
-           const error = this.validateByType(value, rule.validatorType);
-           if (error) {
-             console.error(`Validation failed for ${rule.id}: ${rule.validationMessage}`);
-             isStepValid = false;
-             element.classList.add('error');
-             this.showError(element, rule.validationMessage);
-           } else {
-             element.classList.remove('error');
-             this.clearError(element);
-           }
+        const list = rulesById.get(rule.id);
+        if (list) {
+          list.push(rule);
         } else {
-          console.warn(`Element with id ${rule.id} not found for validation.`);
+          rulesById.set(rule.id, [rule]);
+        }
+      }
+
+      for (const [id, rules] of rulesById.entries()) {
+        const element = document.getElementById(id) as HTMLInputElement;
+        if (!element) {
+          console.warn(`Element with id ${id} not found for validation.`);
+          continue;
+        }
+
+        const value = element.value;
+        let firstFailedRule: ValidationRuleConfig | undefined;
+
+        for (const rule of rules) {
+          if (rule.validatorType) {
+            const error = this.validateByType(value, rule.validatorType);
+            if (error) {
+              firstFailedRule = rule;
+              break;
+            }
+          }
+
+          if (rule.customValidation) {
+            const ok = rule.customValidation(value, element);
+            if (!ok) {
+              firstFailedRule = rule;
+              break;
+            }
+          }
+        }
+
+        if (firstFailedRule) {
+          console.error(`Validation failed for ${id}: ${firstFailedRule.validationMessage}`);
+          isStepValid = false;
+          element.classList.add('error');
+          this.showError(element, firstFailedRule.validationMessage);
+        } else {
+          element.classList.remove('error');
+          this.clearError(element);
         }
       }
 
@@ -81,7 +112,7 @@ export class ValidationService {
       errorElement.classList.add('validation-message');
       element.parentNode?.insertBefore(errorElement, element.nextSibling);
     }
-    errorElement.innerText = this.resourceService.getMessage(message);
+    errorElement.textContent = this.resourceService.getMessage(message);
   }
 
   private clearError(element: HTMLElement): void {

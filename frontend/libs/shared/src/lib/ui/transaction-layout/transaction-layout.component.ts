@@ -24,6 +24,19 @@ export class TransactionLayout {
     return this.authService.isAuthenticated() && !this.router.url.includes('login');
   }
 
+  disableLayout$ = combineLatest([
+    this.flowService.steps$,
+    this.flowService.currentStepIndex$
+  ]).pipe(
+    map(([steps, currentIndex]) => {
+      const currentStep = steps[currentIndex];
+      if (!currentStep) return false;
+      
+      return currentStep.disableLayout;
+    }),
+    delay(0)
+  );
+
   showContinueButton$ = combineLatest([
     this.flowService.steps$,
     this.flowService.currentStepIndex$

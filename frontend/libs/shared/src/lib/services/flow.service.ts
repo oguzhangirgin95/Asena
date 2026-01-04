@@ -18,6 +18,7 @@ export interface FlowStep {
   showContinueButton?: boolean;
   showBackButton?: boolean;
   service?: ServiceConfig;
+  disableLayout?: boolean;
 }
 
 export interface FlowConfig {
