@@ -10,6 +10,10 @@ import { AuthControllerService } from '../api/api/auth-controller.service';
 export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
 
+  // Session-bound flag (in-memory). It resets on full page reload,
+  // preventing users from continuing by manually entering URLs.
+  private sessionAuthenticated = false;
+
   constructor(private authController: AuthControllerService, private router: Router) {}
 
   login(credentials: { [key: string]: string }): Observable<{ [key: string]: string }> {
@@ -20,6 +24,7 @@ export class AuthService {
         if (response && response['token']) {
           console.log('AuthService: Token found in response, saving...');
           this.setToken(response['token']);
+          this.sessionAuthenticated = true;
         } else {
           console.warn('AuthService: No token found in login response');
         }
@@ -47,11 +52,12 @@ export class AuthService {
   isAuthenticated(): boolean {
     const token = this.getToken();
     // In a real app, check expiry
-    return !!token;
+    return !!token && this.sessionAuthenticated;
   }
 
   logout(): void {
     this.removeToken();
-    this.router.navigate(['/login']);
+    this.sessionAuthenticated = false;
+    this.router.navigate(['/authentication/login']);
   }
 }

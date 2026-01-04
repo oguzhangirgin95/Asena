@@ -24,6 +24,7 @@ export async function createFlowGenerator(
 
   const templateOptions = {
     ...options,
+    onlyStart: options.onlyStart ?? false,
     ...names(options.transaction),
     name: names(options.transaction).fileName,
     module: moduleName,
@@ -53,14 +54,65 @@ function updateAppRoutes(tree: Tree, options: CreateFlowGeneratorOptions) {
   if (tree.exists(appRoutesPath)) {
     const content = tree.read(appRoutesPath, 'utf-8');
     if (content && !content.includes(`path: '${moduleName}'`)) {
-      const routeEntry = `  {
+      // Prefer inserting into the guarded parent route block so new modules are protected by AuthGuard.
+      // Special-case authentication module to remain public.
+      const routeEntryInChildren = `      {
+        path: '${moduleName}',
+        loadChildren: () =>
+          import('./${moduleName}/${moduleName}.routes').then((m) => m.${modulePropertyName}Routes),
+      },`;
+
+      const routeEntryTopLevel = `  {
     path: '${moduleName}',
-    loadChildren: () => import('./${moduleName}/${moduleName}.routes').then(m => m.${modulePropertyName}Routes)
+    loadChildren: () =>
+      import('./${moduleName}/${moduleName}.routes').then((m) => m.${modulePropertyName}Routes),
   },`;
-      
+
+      const guardedMarker = 'canActivateChild: [AuthGuard]';
+      const guardedIndex = content.indexOf(guardedMarker);
+
+      const insertIntoGuardedChildren = moduleName !== 'authentication' && guardedIndex !== -1;
+      if (insertIntoGuardedChildren) {
+        const childrenIndex = content.indexOf('children: [', guardedIndex);
+        if (childrenIndex !== -1) {
+          const openBracketIndex = content.indexOf('[', childrenIndex);
+          if (openBracketIndex !== -1) {
+            // Find matching closing bracket for the children array.
+            let depth = 0;
+            let closeBracketIndex = -1;
+            for (let i = openBracketIndex; i < content.length; i++) {
+              const ch = content[i];
+              if (ch === '[') depth++;
+              if (ch === ']') {
+                depth--;
+                if (depth === 0) {
+                  closeBracketIndex = i;
+                  break;
+                }
+              }
+            }
+
+            if (closeBracketIndex !== -1) {
+              const newContent =
+                content.slice(0, closeBracketIndex) +
+                routeEntryInChildren +
+                '\n' +
+                content.slice(closeBracketIndex);
+              tree.write(appRoutesPath, newContent);
+              return;
+            }
+          }
+        }
+      }
+
+      // Fallback: append to top-level routes array.
       const lastBracketIndex = content.lastIndexOf(']');
       if (lastBracketIndex > -1) {
-        const newContent = content.slice(0, lastBracketIndex) + routeEntry + '\n' + content.slice(lastBracketIndex);
+        const newContent =
+          content.slice(0, lastBracketIndex) +
+          routeEntryTopLevel +
+          '\n' +
+          content.slice(lastBracketIndex);
         tree.write(appRoutesPath, newContent);
       }
     }

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Router, UrlTree } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from '../services/auth.service';
 import { vi } from 'vitest';
@@ -32,6 +32,6 @@ describe('AuthGuard', () => {
     
     const result = guard.canActivate();
     
-    expect(createUrlTreeSpy).toHaveBeenCalledWith(['/login']);
+    expect(createUrlTreeSpy).toHaveBeenCalledWith(['/authentication/login']);
   });
 });
