@@ -19,6 +19,35 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = this.authService.getToken();
     console.log('AuthInterceptor: Intercepting request to', request.url);
 
+    // Global fix for OpenAPI-generated clients: they often send Accept: */*
+    // which makes HttpClient treat JSON responses as Blob. Force JSON for API calls.
+    // Safety: Only override when the caller didn't explicitly ask for a specific type.
+    const accept = request.headers.get('Accept');
+    const shouldForceJson =
+      request.url.includes('/api/') &&
+      (!accept || accept === '*/*') &&
+      (request.responseType === 'blob' || request.responseType === 'json');
+
+    if (shouldForceJson) {
+      request = request.clone({
+        setHeaders: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          Accept: 'application/json'
+        },
+        responseType: 'json'
+      });
+
+      // Token already applied above, skip the standard token clone below.
+      return next.handle(request).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.authService.logout();
+          }
+          return throwError(() => error);
+        })
+      );
+    }
+
     if (token) {
       console.log('AuthInterceptor: Adding token to header');
       request = request.clone({

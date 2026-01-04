@@ -6,6 +6,7 @@ api.module.ts
 api/api.ts
 api/auth-controller.service.ts
 api/money-transfer-controller.service.ts
+api/resource-controller.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -15,6 +16,7 @@ model/base-execute-response.ts
 model/key-value-dto.ts
 model/models.ts
 model/money-transfer-request.ts
+model/resource-item-dto.ts
 model/token-request.ts
 model/token-response.ts
 param.ts

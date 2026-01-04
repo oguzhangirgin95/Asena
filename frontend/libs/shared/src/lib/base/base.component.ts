@@ -33,7 +33,9 @@ export abstract class BaseComponent implements OnInit, OnDestroy {
     }
 
     if (this.flowConfig) {
-      this.flowService.initFlow(this.flowConfig);
+      // Transaction route is the parent of the step route (e.g. /authentication/login/start -> parent path is 'login').
+      const transactionName = this.route.parent?.routeConfig?.path;
+      this.flowService.initFlow(this.flowConfig, transactionName);
     }
   }
 

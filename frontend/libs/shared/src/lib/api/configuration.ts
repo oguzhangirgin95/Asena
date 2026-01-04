@@ -125,9 +125,6 @@ constructor({ accessToken, apiKeys, basePath, credentials, encodeParam, encoder,
 
         const type = accepts.find((x: string) => this.isJsonMime(x));
         if (type === undefined) {
-            if (accepts.includes('*/*')) {
-                return 'application/json';
-            }
             return accepts[0];
         }
         return type;

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Type, APP_INITIALIZER, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
-import { APIS } from '../api/api/api';
+import { APIS } from '../api/index';
 
 @Injectable({
   providedIn: 'root'

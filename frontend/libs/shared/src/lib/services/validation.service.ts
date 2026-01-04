@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import validationRules from '../config/validation.json';
+import { ResourceService } from './resource.service';
 
 export interface ValidationRule {
   required?: boolean;
@@ -23,6 +24,8 @@ export class ValidationService {
   private rules: ValidationConfig = validationRules as ValidationConfig;
   private currentRules: ValidationRuleConfig[] = [];
   private customValidationFn: (() => boolean) | null = null;
+
+  constructor(private resourceService: ResourceService) {}
 
   setRules(rules: ValidationRuleConfig[]) {
     this.currentRules = rules || [];
@@ -78,7 +81,7 @@ export class ValidationService {
       errorElement.classList.add('validation-message');
       element.parentNode?.insertBefore(errorElement, element.nextSibling);
     }
-    errorElement.innerText = message;
+    errorElement.innerText = this.resourceService.getMessage(message);
   }
 
   private clearError(element: HTMLElement): void {
@@ -96,14 +99,14 @@ export class ValidationService {
 
     if (rule.required) {
       if (value === null || value === undefined || value === '') {
-        return 'This field is required.';
+        return this.resourceService.get('VALIDATION_REQUIRED');
       }
     }
 
     if (rule.regex && typeof value === 'string' && value !== '') {
       const regex = new RegExp(rule.regex);
       if (!regex.test(value)) {
-        return 'Invalid format.';
+        return this.resourceService.get('VALIDATION_INVALID_FORMAT');
       }
     }
 
@@ -113,7 +116,7 @@ export class ValidationService {
   validateByType(value: unknown, type: string): string | null {
     if (type === 'ValidatorEnum.Required') {
       if (value === null || value === undefined || value === '') {
-        return 'Required';
+        return this.resourceService.get('VALIDATION_REQUIRED');
       }
     }
     // Add more validators here as needed

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve web",
-    "generate-api": "npx rimraf libs/shared/src/lib/api && openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/v3/api-docs -o libs/shared/src/lib/api --additional-properties=ngVersion=17.0.0,fileNaming=kebab-case"
+    "generate-api": "node scripts/generate-api.js"
   },
   "private": true,
   "devDependencies": {

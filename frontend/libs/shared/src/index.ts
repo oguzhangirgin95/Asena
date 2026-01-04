@@ -9,7 +9,7 @@ export * from './lib/services/auth.service';
 export * from './lib/interceptors/auth.interceptor';
 export * from './lib/guards/auth.guard';
 export * from './lib/shared.module';
-export * from './lib/api'; // Auto-generated APIs
+export * from './lib/api/index'; // Auto-generated APIs
 export * from './lib/ui/step-indicator/step-indicator.component';
 export * from './lib/ui/flow-navigation/flow-navigation.component';
 export * from './lib/ui/sidebar/sidebar.component';
@@ -18,3 +18,5 @@ export * from './lib/ui/transaction-layout/transaction-layout.component';
 export * from './lib/utils/route.utils';
 export * from './lib/utils/state.utils';
 export * from './lib/services/service-registry.service';
+export * from './lib/services/resource.service';
+export * from './lib/pipes/resource.pipe';

@@ -1,7 +1,7 @@
 package com.asena.framework.dto;
 
 import lombok.Data;
-import java.util.List;
+
 
 @Data
 public class TokenRequest {

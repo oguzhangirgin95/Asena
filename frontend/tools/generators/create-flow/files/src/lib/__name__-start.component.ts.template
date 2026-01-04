@@ -10,6 +10,9 @@ import { BaseComponent } from '@frontend/shared';
   styleUrls: ['./<%= name %>-start.component.scss'],
 })
 export class <%= className %>StartComponent extends BaseComponent implements OnInit {
+  constructor() {
+    super();
+  }
   override ngOnInit() {
     super.ngOnInit();
   }

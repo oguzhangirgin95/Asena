@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BaseComponent, AuthService } from '@frontend/shared';
+import { BaseComponent, AuthService, ResourcePipe, ResourceService } from '@frontend/shared';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'asena-login-start',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ResourcePipe],
   templateUrl: './login-start.component.html',
   styleUrls: ['./login-start.component.scss'],
 })
@@ -16,15 +16,23 @@ export class LoginStartComponent extends BaseComponent implements OnInit {
     password: ''
   };
   error: string | null = null;
-
+  languages = [
+    { code: 'tr', name: 'tr' },
+    { code: 'en', name: 'en' }
+  ];
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    public resourceService: ResourceService
   ) {
     super();
   }
 
   override ngOnInit() {
     super.ngOnInit();
+  }
+
+  changeLanguage(lang: string) {
+    this.resourceService.setLanguage(lang).catch(() => undefined);
   }
 
   onLogin() {

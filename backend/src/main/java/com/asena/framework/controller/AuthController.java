@@ -3,13 +3,14 @@ package com.asena.framework.controller;
 import com.asena.framework.dto.TokenRequest;
 import com.asena.framework.dto.TokenResponse;
 import com.asena.framework.security.JwtTokenProvider;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;

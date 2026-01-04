@@ -9,12 +9,12 @@ export const LoginConfig = {
           {
             id: 'username',
             validatorType: 'ValidatorEnum.Required',
-            validationMessage: 'Username is required'
+            validationMessage: 'VALIDATION_REQUIRED | Username is required'
           },
           {
             id: 'password',
             validatorType: 'ValidatorEnum.Required',
-            validationMessage: 'Password is required'
+            validationMessage: 'VALIDATION_REQUIRED | Password is required'
           }
         ],
       },

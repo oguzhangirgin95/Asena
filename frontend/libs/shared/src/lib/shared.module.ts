@@ -4,7 +4,7 @@ import { ButtonComponent } from './ui/button/button.component';
 import { InputComponent } from './ui/input/input.component';
 import { ModalComponent } from './ui/modal/modal.component';
 import { ServiceRegistry } from './services/service-registry.service';
-import { APIS } from './api';
+import { APIS } from './api/index';
 
 @NgModule({
   imports: [CommonModule, ButtonComponent, InputComponent, ModalComponent],

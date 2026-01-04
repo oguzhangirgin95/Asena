@@ -1,9 +1,10 @@
 import { Injectable, inject, Injector } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { ValidationService, ValidationRuleConfig } from './validation.service';
 import { ServiceRegistry } from './service-registry.service';
+import { ResourceService } from './resource.service';
 
 export interface ServiceConfig {
   serviceName: string;
@@ -37,6 +38,7 @@ export class FlowService {
   private validationService = inject(ValidationService);
   private injector = inject(Injector);
   private serviceRegistry = inject(ServiceRegistry);
+  private resourceService = inject(ResourceService);
 
   private stepsSubject = new BehaviorSubject<FlowStep[]>([]);
   public steps$ = this.stepsSubject.asObservable();
@@ -48,10 +50,23 @@ export class FlowService {
     // State is now in-memory only
   }
 
-  public initFlow(config: FlowConfig): void {
+  public initFlow(config: FlowConfig, transactionNameOverride?: string): void {
     this.stepsSubject.next(config.config.steps);
     this.currentStepIndexSubject.next(0);
     this.clear(); // Clear previous state on new flow init
+
+    // Load transaction-scoped resources once at the start of each flow.
+    // Route convention: /.../{transactionName}/{step}
+    const normalizedOverride = (transactionNameOverride ?? '').toString().trim();
+    const transactionNameFromOverride = normalizedOverride && normalizedOverride !== 'general'
+      ? normalizedOverride
+      : undefined;
+
+    const transactionNameFromRouteTree = this.getTransactionNameFromRouteTree();
+    const transactionName = transactionNameFromOverride ?? transactionNameFromRouteTree ?? 'general';
+    this.resourceService.currentTransactionName.set(transactionName);
+    // Fire-and-forget; UI bindings via resource pipe will update when loaded.
+    this.resourceService.ensureTransactionLoaded(transactionName).catch(() => undefined);
     
     if (config.config.steps.length > 0) {
       this.validationService.setRules(config.config.steps[0].validation);
@@ -142,6 +157,18 @@ export class FlowService {
 
   public clear(): void {
     this.state.clear();
+  }
+
+  private getTransactionNameFromRouteTree(): string | undefined {
+    // Find deepest active route, then take its parent path as transaction name.
+    // Example: /authentication/login/start -> deepest='start', parent='login'.
+    let current: ActivatedRouteSnapshot | undefined = this.router.routerState.snapshot.root;
+    while (current?.firstChild) {
+      current = current.firstChild;
+    }
+
+    const tx = current?.parent?.routeConfig?.path;
+    return tx ? tx.toString().trim() || undefined : undefined;
   }
 
   private async executeService(config: ServiceConfig): Promise<void> {

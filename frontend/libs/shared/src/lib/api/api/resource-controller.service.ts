@@ -17,9 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { TokenRequest } from '../model/token-request';
-// @ts-ignore
-import { TokenResponse } from '../model/token-response';
+import { ResourceItemDto } from '../model/resource-item-dto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -31,25 +29,25 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthControllerService extends BaseService {
+export class ResourceControllerService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * @endpoint post /api/auth/login
-     * @param requestBody 
+     * @endpoint get /api/resources/{languageCode}
+     * @param languageCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public login(requestBody: { [key: string]: string; }, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: string; }>;
-    public login(requestBody: { [key: string]: string; }, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: string; }>>;
-    public login(requestBody: { [key: string]: string; }, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: string; }>>;
-    public login(requestBody: { [key: string]: string; }, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (requestBody === null || requestBody === undefined) {
-            throw new Error('Required parameter requestBody was null or undefined when calling login.');
+    public getResources(languageCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ResourceItemDto>>;
+    public getResources(languageCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ResourceItemDto>>>;
+    public getResources(languageCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ResourceItemDto>>>;
+    public getResources(languageCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (languageCode === null || languageCode === undefined) {
+            throw new Error('Required parameter languageCode was null or undefined when calling getResources.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -66,15 +64,6 @@ export class AuthControllerService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -86,12 +75,11 @@ export class AuthControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/auth/login`;
+        let localVarPath = `/api/resources/${this.configuration.encodeParam({name: "languageCode", value: languageCode, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<{ [key: string]: string; }>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ResourceItemDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: requestBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -103,18 +91,22 @@ export class AuthControllerService extends BaseService {
     }
 
     /**
-     * @endpoint post /api/auth/token
-     * @param tokenRequest 
+     * @endpoint get /api/resources/{languageCode}/{transactionName}
+     * @param languageCode 
+     * @param transactionName 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public token(tokenRequest: TokenRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenResponse>;
-    public token(tokenRequest: TokenRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenResponse>>;
-    public token(tokenRequest: TokenRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenResponse>>;
-    public token(tokenRequest: TokenRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (tokenRequest === null || tokenRequest === undefined) {
-            throw new Error('Required parameter tokenRequest was null or undefined when calling token.');
+    public getResourcesByTransaction(languageCode: string, transactionName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ResourceItemDto>>;
+    public getResourcesByTransaction(languageCode: string, transactionName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ResourceItemDto>>>;
+    public getResourcesByTransaction(languageCode: string, transactionName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ResourceItemDto>>>;
+    public getResourcesByTransaction(languageCode: string, transactionName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (languageCode === null || languageCode === undefined) {
+            throw new Error('Required parameter languageCode was null or undefined when calling getResourcesByTransaction.');
+        }
+        if (transactionName === null || transactionName === undefined) {
+            throw new Error('Required parameter transactionName was null or undefined when calling getResourcesByTransaction.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -131,15 +123,6 @@ export class AuthControllerService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -151,12 +134,11 @@ export class AuthControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/auth/token`;
+        let localVarPath = `/api/resources/${this.configuration.encodeParam({name: "languageCode", value: languageCode, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "transactionName", value: transactionName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<TokenResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ResourceItemDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: tokenRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
