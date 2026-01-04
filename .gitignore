@@ -15,6 +15,9 @@ coverage/
 .angular/
 .nx/
 
+# Generated from config/environment.json
+frontend/apps/web/public/environment.json
+
 # Java / Backend
 target/
 *.class

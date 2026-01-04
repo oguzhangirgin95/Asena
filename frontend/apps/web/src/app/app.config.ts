@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER 
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor, Configuration, provideServiceRegistry, ResourceService } from '@frontend/shared';
+import { AuthInterceptor, Configuration, provideServiceRegistry, ResourceService, EnvironmentConfigService } from '@frontend/shared';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,14 +11,20 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideServiceRegistry(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { 
-      provide: Configuration, 
-      useFactory: () => new Configuration({ basePath: '' }) 
+    {
+      provide: Configuration,
+      useFactory: () => new Configuration({ basePath: '' })
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (resourceService: ResourceService) => () => resourceService.ensureGeneralLoaded(),
-      deps: [ResourceService],
+      useFactory:
+        (env: EnvironmentConfigService, apiConfig: Configuration, resourceService: ResourceService) =>
+        async () => {
+          await env.load();
+          apiConfig.basePath = env.getApiBasePath();
+          await resourceService.ensureGeneralLoaded();
+        },
+      deps: [EnvironmentConfigService, Configuration, ResourceService],
       multi: true
     }
   ]

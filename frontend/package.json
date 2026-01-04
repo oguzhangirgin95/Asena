@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "sync-env": "node scripts/sync-environment.js",
+    "prestart": "npm run sync-env",
     "start": "nx serve web",
     "generate-api": "node scripts/generate-api.js"
   },

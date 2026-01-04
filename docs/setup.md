@@ -29,6 +29,26 @@ Not: Frontend Nx kullanır ve komutlar `frontend/package.json` altında tanıml�
 
 ## Projeyi ilk kez ayağa kaldırma
 
+## Ortak Environment Dosyası
+
+Bu projede **tek kaynak** environment dosyası vardır:
+
+- `config/environment.json`
+
+Hem **backend** hem **frontend** bu dosyayı kullanır:
+
+- Frontend runtime’da `/environment.json` üzerinden okur (build/serve sırasında `config/environment.json` asset olarak kopyalanır).
+- Backend startup sırasında dosyayı okumayı dener (bulamazsa varsayılanlarla devam eder).
+
+Önemli alanlar:
+
+- `environment`: `local | dev | test | prod`
+- `api.basePath`: Frontend OpenAPI client base path.
+  - Local dev + Angular proxy için önerilen değer: `""`
+  - Backend’e direkt gitmek istersen: `"http://localhost:8080"`
+- `cors.allowedOrigins`: Backend CORS allowlist.
+- `security.jwt.*`: JWT expiration/secret (prod ortamında secret mutlaka değiştirilmelidir).
+
 ### 1) Repo kökünde (opsiyonel)
 
 Bu repo root’ta sadece sınırlı tooling var; asıl bağımlılıklar `frontend/` ve `backend/` altında.

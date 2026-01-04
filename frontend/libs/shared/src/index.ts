@@ -10,6 +10,8 @@ export * from './lib/interceptors/auth.interceptor';
 export * from './lib/guards/auth.guard';
 export * from './lib/shared.module';
 export * from './lib/api/index'; // Auto-generated APIs
+
+export * from './lib/services/environment-config.service';
 export * from './lib/ui/step-indicator/step-indicator.component';
 export * from './lib/ui/flow-navigation/flow-navigation.component';
 export * from './lib/ui/sidebar/sidebar.component';
