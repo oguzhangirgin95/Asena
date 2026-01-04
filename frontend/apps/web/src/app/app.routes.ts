@@ -28,6 +28,16 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('./main/main.routes').then((m) => m.mainRoutes),
       },
+      {
+        path: 'account',
+        loadChildren: () =>
+          import('./account/account.routes').then((m) => m.accountRoutes),
+      },
+      {
+        path: 'loan',
+        loadChildren: () =>
+          import('./loan/loan.routes').then((m) => m.loanRoutes),
+      },
     ],
   },
 ];

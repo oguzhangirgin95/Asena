@@ -1,5 +1,6 @@
 {
   "name": "asena-vscode",
+  "publisher": "asena",
   "displayName": "Asena VS Code Extension",
   "description": "Asena Framework Helper",
   "version": "0.0.1",
@@ -22,11 +23,13 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
   },
   "devDependencies": {
     "@types/vscode": "^1.96.0",
     "@types/node": "20.x",
+    "@vscode/vsce": "^3.4.2",
     "typescript": "^5.7.2"
   }
 }

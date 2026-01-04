@@ -17,4 +17,13 @@ export class DashboardStartComponent extends BaseComponent implements OnInit {
   goToMoneyTransfer() {
     this.flowService.navigate('payment/money-transfer');
   }
+  goToAccounts() {
+    this.flowService.navigate('account/all-account');
+  }
+  goToAccountDetail() {
+    this.flowService.navigate('account/account-detail');
+  }
+  goToApplyVehicleCredit() {
+    this.flowService.navigate('loan/apply-vehicle-credit');
+  }
 }
