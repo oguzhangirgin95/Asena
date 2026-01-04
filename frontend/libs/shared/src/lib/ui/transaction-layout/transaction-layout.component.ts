@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
 import { ButtonComponent } from '../button/button.component';
 import { FlowService } from '../../services/flow.service';
+import { AuthService } from '../../services/auth.service';
 import { combineLatest, map, delay } from 'rxjs';
 
 @Component({
@@ -16,6 +17,12 @@ import { combineLatest, map, delay } from 'rxjs';
 })
 export class TransactionLayout {
   private flowService = inject(FlowService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  get showLayout(): boolean {
+    return this.authService.isAuthenticated() && !this.router.url.includes('login');
+  }
 
   showContinueButton$ = combineLatest([
     this.flowService.steps$,

@@ -1,7 +1,7 @@
 <div class="layout-container">
-  <lib-sidebar class="sidebar"></lib-sidebar>
+  <lib-sidebar *ngIf="showLayout" class="sidebar"></lib-sidebar>
   <div class="main-content">
-    <lib-header class="header"></lib-header>
+    <lib-header *ngIf="showLayout" class="header"></lib-header>
     <div class="content-area">
       <router-outlet></router-outlet>
       <div class="footer-actions">

@@ -31,7 +31,6 @@ export interface FlowConfig {
 })
 export class FlowService {
   private state: Map<string, any> = new Map();
-  private readonly STORAGE_KEY = 'flow_state';
   
   private router = inject(Router);
   private location = inject(Location);
@@ -46,7 +45,7 @@ export class FlowService {
   public currentStepIndex$ = this.currentStepIndexSubject.asObservable();
 
   constructor() {
-    this.loadState();
+    // State is now in-memory only
   }
 
   public initFlow(config: FlowConfig): void {
@@ -135,7 +134,6 @@ export class FlowService {
 
   public set(key: string, value: any): void {
     this.state.set(key, value);
-    this.saveState();
   }
 
   public get<T>(key: string): T | undefined {
@@ -144,25 +142,6 @@ export class FlowService {
 
   public clear(): void {
     this.state.clear();
-    sessionStorage.removeItem(this.STORAGE_KEY);
-  }
-
-  private saveState(): void {
-    const obj = Object.fromEntries(this.state);
-    sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(obj));
-  }
-
-  private loadState(): void {
-    const stored = sessionStorage.getItem(this.STORAGE_KEY);
-    if (stored) {
-      try {
-        const obj = JSON.parse(stored);
-        this.state = new Map(Object.entries(obj));
-      } catch (e) {
-        console.error('Failed to load state', e);
-        this.state = new Map();
-      }
-    }
   }
 
   private async executeService(config: ServiceConfig): Promise<void> {
