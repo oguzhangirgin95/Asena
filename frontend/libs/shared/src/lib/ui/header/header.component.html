@@ -1,1 +1,7 @@
-<p>header works!</p>
+<nav class="navbar navbar-expand bg-body px-3">
+	<span class="navbar-brand mb-0 h1">Asena</span>
+
+	<div class="ms-auto" *ngIf="resourceService.currentTransactionName() as tx">
+		<span class="badge text-bg-secondary" *ngIf="tx && tx !== 'general'">{{ tx }}</span>
+	</div>
+</nav>

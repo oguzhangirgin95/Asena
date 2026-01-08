@@ -1,0 +1,8 @@
+.sidebar-root {
+	height: 100%;
+	background: var(--bs-tertiary-bg);
+}
+
+.list-group-item {
+	background: transparent;
+}

@@ -16,6 +16,11 @@
         "browser": "apps/web/src/main.ts",
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "node_modules"
+          ]
+        },
         "assets": [
           {
             "glob": "**/*",

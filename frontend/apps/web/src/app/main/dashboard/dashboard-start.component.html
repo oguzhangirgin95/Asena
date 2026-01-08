@@ -1,8 +1,25 @@
-<div class="container">
-  <h2>Welcome to Dashboard</h2>
-  <p>You have successfully logged in.</p>
-  <button (click)="goToMoneyTransfer()">Money Transfer</button>
-  <button (click)="goToAccounts()">All Account</button>
-  <button (click)="goToAccountDetail()">AccountDetail</button>
-  <button (click)="goToApplyVehicleCredit()">Apply Vehicle Credit</button>
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="mb-3">
+        <h2 class="h4 mb-1">Dashboard</h2>
+        <div class="text-body-secondary">Choose a transaction to start.</div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <button class="btn btn-primary w-100" (click)="goToMoneyTransfer()">Money Transfer</button>
+        </div>
+        <div class="col-12 col-md-6">
+          <button class="btn btn-outline-primary w-100" (click)="goToAccounts()">All Accounts</button>
+        </div>
+        <div class="col-12 col-md-6">
+          <button class="btn btn-outline-primary w-100" (click)="goToAccountDetail()">Account Detail</button>
+        </div>
+        <div class="col-12 col-md-6">
+          <button class="btn btn-outline-primary w-100" (click)="goToApplyVehicleCredit()">Vehicle Credit</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

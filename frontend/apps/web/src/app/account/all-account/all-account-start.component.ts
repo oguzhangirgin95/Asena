@@ -15,5 +15,6 @@ export class AllAccountStartComponent extends BaseComponent implements OnInit {
   }
   override ngOnInit() {
     super.ngOnInit();
+    console.log(this.State.transferRequest);
   }
 }

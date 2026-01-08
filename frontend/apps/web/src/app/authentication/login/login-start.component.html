@@ -1,41 +1,57 @@
-<div class="container">
-  <form (ngSubmit)="onLogin()">
-    <div class="form-group">
-      <select
-        id="language"
-        [ngModel]="resourceService.currentLanguage()"
-        (ngModelChange)="changeLanguage($event)"
-        name="language"
-        class="form-control"
-      >
-        <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
-      </select>
+<div class="container min-vh-100 d-flex align-items-center justify-content-center py-4">
+  <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <div class="mb-3">
+          <h1 class="h4 mb-1">{{ 'LOGIN_TITLE | Login' | resource }}</h1>
+          <div class="text-body-secondary">{{ 'LOGIN_SUBTITLE | Sign in to continue' | resource }}</div>
+        </div>
+
+        <form (ngSubmit)="onLogin()" class="vstack gap-3">
+          <div>
+            <label for="language" class="form-label">{{ 'LANGUAGE | Language' | resource }}</label>
+            <select
+              id="language"
+              [ngModel]="resourceService.currentLanguage()"
+              (ngModelChange)="changeLanguage($event)"
+              name="language"
+              class="form-select"
+            >
+              <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="username" class="form-label">{{ 'LOGIN_USERNAME | Username' | resource }}</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="credentials.username"
+              class="form-control"
+              autocomplete="username"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="form-label">{{ 'LOGIN_PASSWORD | Password' | resource }}</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              [(ngModel)]="credentials.password"
+              class="form-control"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger mb-0" role="alert">{{ error }}</div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            {{ 'LOGIN_BUTTON | Login' | resource }}
+          </button>
+        </form>
+      </div>
     </div>
-
-    <div class="form-group">
-      <label for="username">{{ 'LOGIN_USERNAME | Username' | resource }}</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        [(ngModel)]="credentials.username"
-        class="form-control"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="password">{{ 'LOGIN_PASSWORD | Password' | resource }}</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        [(ngModel)]="credentials.password"
-        class="form-control"
-      />
-    </div>
-
-    <div *ngIf="error" class="error">{{ error }}</div>
-
-    <button type="submit">{{ 'LOGIN_BUTTON | Login' | resource }}</button>
-  </form>
+  </div>
 </div>

@@ -23,29 +23,32 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #e0e0e0;
+  background-color: var(--bs-tertiary-bg);
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   margin-bottom: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  color: var(--bs-body-color);
+  border: 1px solid var(--bs-border-color);
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 .step.active .circle {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
   transform: scale(1.2);
 }
 
 .step.completed .circle {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--bs-success);
+  color: var(--bs-white);
 }
 
 .label {
   font-size: 12px;
   font-weight: 500;
+  color: var(--bs-secondary-color);
 }
 
 /* Connecting lines */
@@ -57,10 +60,10 @@
   width: 100%; /* Adjust based on gap */
   width: calc(100% + 40px); /* gap is 40px */
   height: 2px;
-  background-color: #e0e0e0;
+  background-color: var(--bs-border-color);
   z-index: -1;
 }
 
 .step.completed:not(:last-child)::after {
-  background-color: #28a745;
+  background-color: var(--bs-success);
 }

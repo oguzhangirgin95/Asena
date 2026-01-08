@@ -1,14 +1,33 @@
 <div *ngIf="!(disableLayout$ | async)" class="layout-container">
   <lib-sidebar *ngIf="showLayout" class="sidebar"></lib-sidebar>
+
   <div class="main-content">
     <lib-header *ngIf="showLayout" class="header"></lib-header>
-    <div class="content-area">
-      <router-outlet></router-outlet>
-      <div class="footer-actions">
-        <lib-button *ngIf="showBackButton$ | async" label="Back" (onClick)="onBack()" variant="secondary"></lib-button>
-        <lib-button *ngIf="showContinueButton$ | async" label="Continue" (onClick)="onContinue()"></lib-button>
+
+    <main class="content-area">
+      <div class="container py-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <lib-step-indicator class="d-block mb-3"></lib-step-indicator>
+            <router-outlet></router-outlet>
+          </div>
+
+          <div class="card-footer bg-body d-flex justify-content-end gap-2">
+            <lib-button
+              *ngIf="showBackButton$ | async"
+              label="Back"
+              (onClick)="onBack()"
+              variant="secondary"
+            ></lib-button>
+            <lib-button
+              *ngIf="showContinueButton$ | async"
+              label="Continue"
+              (onClick)="onContinue()"
+            ></lib-button>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   </div>
 </div>
 <div *ngIf="disableLayout$ | async">

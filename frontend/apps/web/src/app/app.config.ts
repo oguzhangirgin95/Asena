@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER 
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor, Configuration, provideServiceRegistry, ResourceService, EnvironmentConfigService } from '@frontend/shared';
+import { AuthInterceptor, Configuration, provideServiceRegistry, ResourceService, EnvironmentConfigService, TRANSACTION_PATH_MAP } from '@frontend/shared';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -10,6 +10,26 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideHttpClient(withInterceptorsFromDi()),
     provideServiceRegistry(),
+    {
+      provide: TRANSACTION_PATH_MAP,
+      useValue: {
+        // authentication
+        login: 'authentication/login',
+
+        // main
+        dashboard: 'main/dashboard',
+
+        // payment
+        'money-transfer': 'payment/money-transfer',
+
+        // account
+        'all-account': 'account/all-account',
+        'account-detail': 'account/account-detail',
+
+        // loan
+        'apply-vehicle-credit': 'loan/apply-vehicle-credit',
+      }
+    },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: Configuration,

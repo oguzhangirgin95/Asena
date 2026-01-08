@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { BaseComponent, ResourceService } from '@frontend/shared';
 
 @Component({
-  selector: 'asena-money-transfer-start',
+  selector: 'asena-money-transfer-contact',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './money-transfer-start.component.html',
-  styleUrls: ['./money-transfer-start.component.scss'],
+  templateUrl: './money-transfer-contact.component.html',
+  styleUrls: ['./money-transfer-contact.component.scss'],
 })
-export class MoneyTransferStartComponent
+export class MoneyTransferContactComponent
   extends BaseComponent
   implements OnInit {
   constructor(
@@ -20,11 +20,6 @@ export class MoneyTransferStartComponent
   title: string = '';
   override ngOnInit() {
     super.ngOnInit();
-    this.title = this.resourceService.getMessage('MoneyTransferTitle | Money Transfer');
-    this.State.transferRequest = {
-      amount: 10,
-      iban: 'TR5647273823239723978',
-      fromAccountType: 'ACCOUNT'
-    };
+    this.title = this.resourceService.getMessage('MoneyTransferContactTitle | Money Transfer Contact');
   }
 }

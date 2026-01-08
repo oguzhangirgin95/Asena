@@ -39,7 +39,7 @@ export class LoginStartComponent extends BaseComponent implements OnInit {
     if (this.validationService.Validate()) {
       this.authService.login(this.credentials).subscribe({
         next: () => {
-          this.flowService.navigate('main/dashboard');
+          this.flowService.navigate('dashboard');
         },
         error: (err) => {
           this.error = 'Login failed. Please check your credentials.';

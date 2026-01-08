@@ -1,11 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+/* Master (global) stylesheet for the web app. */
 
-.error {
-  border: 1px solid red !important;
-}
+@use 'bootstrap/scss/bootstrap';
 
 .validation-message {
-  color: red;
+  color: var(--bs-danger);
   font-size: 0.875rem;
   margin-top: 0.25rem;
+}
+
+/* Legacy helper: prefer Bootstrap's `.is-invalid` / `.alert` in new UI. */
+.error {
+  border: 1px solid var(--bs-danger) !important;
 }

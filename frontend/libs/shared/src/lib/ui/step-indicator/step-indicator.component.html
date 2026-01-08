@@ -1,9 +1,13 @@
-<div class="step-indicator-container" *ngIf="steps$ | async as steps">
-  <div class="step" 
-       *ngFor="let step of steps; let i = index"
-       [class.active]="(currentStepIndex$ | async) === i"
-       [class.completed]="(currentStepIndex$ | async)! > i">
-    <div class="circle">{{ i + 1 }}</div>
-    <span class="label">{{ step.step | titlecase }}</span>
+<ng-container *ngIf="(vm$ | async) as vm">
+  <div class="step-indicator-container" *ngIf="vm.steps.length > 1">
+    <div
+      class="step"
+      *ngFor="let step of vm.steps; let i = index"
+      [class.active]="vm.currentIndex === i"
+      [class.completed]="vm.currentIndex > i"
+    >
+      <div class="circle">{{ i + 1 }}</div>
+      <span class="label">{{ step.step | titlecase }}</span>
+    </div>
   </div>
-</div>
+</ng-container>

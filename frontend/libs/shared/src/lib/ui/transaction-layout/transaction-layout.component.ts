@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
 import { ButtonComponent } from '../button/button.component';
+import { StepIndicator } from '../step-indicator/step-indicator.component';
 import { FlowService } from '../../services/flow.service';
 import { AuthService } from '../../services/auth.service';
 import { combineLatest, map, delay } from 'rxjs';
@@ -11,7 +12,7 @@ import { combineLatest, map, delay } from 'rxjs';
 @Component({
   selector: 'lib-transaction-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent, HeaderComponent, ButtonComponent],
+  imports: [CommonModule, RouterModule, SidebarComponent, HeaderComponent, ButtonComponent, StepIndicator],
   templateUrl: './transaction-layout.component.html',
   styleUrl: './transaction-layout.component.css',
 })

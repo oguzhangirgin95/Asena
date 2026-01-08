@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ResourceService } from '../../services/resource.service';
 
 @Component({
   selector: 'lib-header',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  protected resourceService = inject(ResourceService);
+}

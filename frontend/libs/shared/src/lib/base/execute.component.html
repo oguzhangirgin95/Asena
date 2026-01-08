@@ -1,21 +1,42 @@
-<div class="container">
-  <h2>Execute Result</h2>
-  
-  <div *ngIf="data" class="result-container">
-    <div class="status" [class.success]="data.success" [class.error]="!data.success">
+<div class="vstack gap-3">
+  <div>
+    <h2 class="h5 mb-1">Execute Result</h2>
+    <div class="text-body-secondary">Execution summary and next actions.</div>
+  </div>
+
+  <ng-container *ngIf="data">
+    <div
+      class="alert mb-0"
+      [class.alert-success]="data.success"
+      [class.alert-danger]="!data.success"
+      role="alert"
+    >
       {{ data.message }}
     </div>
 
-    <div *ngIf="data.referenceNumber" class="reference">
-      Reference: {{ data.referenceNumber }}
+    <div *ngIf="data.referenceNumber" class="small text-body-secondary">
+      Reference: <span class="fw-semibold">{{ data.referenceNumber }}</span>
     </div>
 
-    <div *ngIf="data.details" class="details">
+    <div *ngIf="data.details" class="border rounded p-3 bg-body">
       <lib-key-value-list [items]="data.details!"></lib-key-value-list>
     </div>
-  </div>
+  </ng-container>
 
-  <div class="actions">
-    <lib-button label="Close" (onClick)="onClose()"></lib-button>
+  <div class="d-flex justify-content-end gap-2">
+    <ng-container *ngIf="visibleButtons$ | async as buttons">
+      <ng-container *ngIf="buttons.length > 0; else defaultClose">
+        <lib-button
+          *ngFor="let button of buttons"
+          [label]="button.label"
+          [variant]="getButtonVariant(button)"
+          (onClick)="navigate(button.navigate)"
+        ></lib-button>
+      </ng-container>
+
+      <ng-template #defaultClose>
+        <lib-button label="Close" (onClick)="onClose()"></lib-button>
+      </ng-template>
+    </ng-container>
   </div>
 </div>

@@ -1,6 +1,10 @@
-<div class="container">
-  <h2>Confirm</h2>
-  <div *ngIf="data?.details">
+<div class="vstack gap-3">
+  <div>
+    <h2 class="h5 mb-1">Confirm</h2>
+    <div class="text-body-secondary">Review the details before continuing.</div>
+  </div>
+
+  <div *ngIf="data?.details" class="border rounded p-3 bg-body">
     <lib-key-value-list [items]="data!.details!"></lib-key-value-list>
   </div>
 </div>

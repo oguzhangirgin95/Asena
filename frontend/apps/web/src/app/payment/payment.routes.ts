@@ -10,7 +10,16 @@ export const paymentRoutes: Route[] = [
         (m) => m.MoneyTransferStartComponent,
       ),
     MoneyTransferConfig,
-    [],
+    [
+      {
+        path: 'contact',
+        loadComponent: () =>
+          import('./money-transfer/money-transfer-contact.component').then(
+            (m) => m.MoneyTransferContactComponent,
+          ),
+        data: { flowConfig: MoneyTransferConfig },
+      },
+    ],
     true,
   ),
 ];

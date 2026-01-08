@@ -15,15 +15,15 @@ export class DashboardStartComponent extends BaseComponent implements OnInit {
   }
 
   goToMoneyTransfer() {
-    this.flowService.navigate('payment/money-transfer');
+    this.flowService.navigate('money-transfer');
   }
   goToAccounts() {
-    this.flowService.navigate('account/all-account');
+    this.flowService.navigate('all-account');
   }
   goToAccountDetail() {
-    this.flowService.navigate('account/account-detail');
+    this.flowService.navigate('account-detail');
   }
   goToApplyVehicleCredit() {
-    this.flowService.navigate('loan/apply-vehicle-credit');
+    this.flowService.navigate('apply-vehicle-credit');
   }
 }

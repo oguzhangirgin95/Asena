@@ -22,3 +22,4 @@ export * from './lib/utils/state.utils';
 export * from './lib/services/service-registry.service';
 export * from './lib/services/resource.service';
 export * from './lib/pipes/resource.pipe';
+export * from './lib/tokens/transaction-paths.token';

@@ -15,7 +15,6 @@ export abstract class BaseComponent implements OnInit, OnDestroy {
   
   protected flowConfig?: FlowConfig;
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   public State: any = new Proxy({}, {
     get: (target, prop: string) => this.flowService.get(prop),
     set: (target, prop: string, value: any) => {

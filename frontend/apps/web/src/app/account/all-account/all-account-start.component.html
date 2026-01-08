@@ -1,4 +1,11 @@
-<div class="container">
-  <h2>AllAccount Start</h2>
+<div class="vstack gap-3">
+  <div>
+    <h2 class="h5 mb-1">All Accounts</h2>
+  </div>
+
+  <div *ngIf="State?.transferRequest?.iban" class="small text-body-secondary">
+    IBAN: <span class="fw-semibold">{{ State?.transferRequest?.iban }}</span>
+  </div>
+
   <!-- Add your start logic here -->
 </div>
