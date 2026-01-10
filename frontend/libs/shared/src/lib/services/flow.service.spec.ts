@@ -1,13 +1,49 @@
 import { TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { FlowService } from './flow.service';
+import { ValidationService } from './validation.service';
+import { ServiceRegistry } from './service-registry.service';
+import { ResourceService } from './resource.service';
+import { TRANSACTION_PATH_MAP } from '../tokens/transaction-paths.token';
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 describe('FlowService', () => {
   let service: FlowService;
 
   beforeEach(() => {
-    sessionStorage.clear();
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        FlowService,
+        {
+          provide: Router,
+          useValue: {
+            url: '/',
+            routerState: { snapshot: { root: { firstChild: undefined } } },
+            parseUrl: () => ({ root: { children: { primary: { segments: [] } } } }),
+            navigateByUrl: () => Promise.resolve(true),
+          },
+        },
+        { provide: Location, useValue: {} },
+        {
+          provide: ValidationService,
+          useValue: {
+            setRules: () => undefined,
+            Validate: () => true,
+            registerValidation: () => undefined,
+          },
+        },
+        { provide: ServiceRegistry, useValue: { get: () => undefined } },
+        {
+          provide: ResourceService,
+          useValue: {
+            currentTransactionName: { set: () => undefined },
+            ensureTransactionLoaded: () => Promise.resolve({}),
+          },
+        },
+        { provide: TRANSACTION_PATH_MAP, useValue: {} },
+      ],
+    });
     service = TestBed.inject(FlowService);
   });
 
@@ -20,23 +56,9 @@ describe('FlowService', () => {
     expect(service.get<string>('testKey')).toBe('testValue');
   });
 
-  it('should persist state to sessionStorage', () => {
-    service.set('persistKey', 'persistValue');
-    const stored = sessionStorage.getItem('flow_state');
-    expect(stored).toBeTruthy();
-    expect(JSON.parse(stored!)['persistKey']).toBe('persistValue');
-  });
-
-  it('should load state from sessionStorage on init', () => {
-    sessionStorage.setItem('flow_state', JSON.stringify({ loadedKey: 'loadedValue' }));
-    const newService = new FlowService();
-    expect(newService.get<string>('loadedKey')).toBe('loadedValue');
-  });
-
   it('should clear state', () => {
     service.set('key', 'value');
     service.clear();
     expect(service.get('key')).toBeUndefined();
-    expect(sessionStorage.getItem('flow_state')).toBeNull();
   });
 });

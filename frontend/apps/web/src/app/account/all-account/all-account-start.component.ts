@@ -10,6 +10,7 @@ import { BaseComponent } from '@frontend/shared';
   styleUrls: ['./all-account-start.component.scss'],
 })
 export class AllAccountStartComponent extends BaseComponent implements OnInit {
+  public readonly transferRequesttttt = this.flowService.select<any>('transferRequesttttt');
   constructor() {
     super();
   }

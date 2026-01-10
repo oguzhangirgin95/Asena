@@ -99,7 +99,7 @@ export class ExecuteComponent extends BaseComponent implements OnInit {
     }
   }
 
-  navigate(path: string): void {
-    this.flowService.navigate(path);
+  navigate(path: string, preserveState?: boolean): void {
+    this.flowService.navigate(path, preserveState);
   }
 }

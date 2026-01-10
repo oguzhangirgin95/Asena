@@ -1,4 +1,4 @@
-import { Injectable, inject, Injector } from '@angular/core';
+import { Injectable, inject, Injector, Signal, computed, signal } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
@@ -52,6 +52,10 @@ export interface FlowConfig {
 })
 export class FlowService {
   private state: Map<string, any> = new Map();
+
+  // Keep state storage as a Map, but expose updates to Angular's reactivity system.
+  // Any template/code path that calls `get()` becomes reactive to state changes.
+  private readonly stateVersion = signal(0);
 
   private transactionBackStack: string[] = [];
   private preserveStateForNextFlowInit = false;
@@ -119,13 +123,17 @@ export class FlowService {
     this.validationService.registerValidation(fn);
   }
 
-  public navigate(transactionName: string): void {
+  public navigate(transactionName: string, preserveState?: boolean): void {
     const raw = (transactionName ?? '').toString().trim();
     if (!raw) return;
 
     const currentIndex = this.currentStepIndexSubject.value;
     const currentStep = this.stepsSubject.value[currentIndex];
-    this.preserveStateForNextFlowInit = currentStep?.keepState === true;
+    // By default we respect the current step's `keepState`.
+    // If caller provides `preserveState`, it explicitly overrides step config.
+    this.preserveStateForNextFlowInit = preserveState === undefined
+      ? currentStep?.keepState === true
+      : preserveState === true;
 
     // Support legacy callers passing full paths like "payment/money-transfer".
     const normalized = raw.replace(/^\//, '');
@@ -258,14 +266,22 @@ export class FlowService {
 
   public set(key: string, value: any): void {
     this.state.set(key, value);
+    this.stateVersion.update((v) => v + 1);
   }
 
   public get<T>(key: string): T | undefined {
+    // Register dependency for Angular Signals.
+    this.stateVersion();
     return this.state.get(key) as T;
+  }
+
+  public select<T>(key: string): Signal<T | undefined> {
+    return computed(() => this.get<T>(key));
   }
 
   public clear(): void {
     this.state.clear();
+    this.stateVersion.update((v) => v + 1);
   }
 
   private getTransactionNameFromRouteTree(): string | undefined {

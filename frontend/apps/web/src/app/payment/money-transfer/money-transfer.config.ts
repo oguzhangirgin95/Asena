@@ -36,7 +36,7 @@ export const MoneyTransferConfig: FlowConfig = {
           methodName: "execute",
           params:[State.transferRequest]
         },
-        keepState: false,
+        keepState: true,
         buttons: [
           {
             id:"button1",

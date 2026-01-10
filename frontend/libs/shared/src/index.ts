@@ -17,6 +17,7 @@ export * from './lib/ui/flow-navigation/flow-navigation.component';
 export * from './lib/ui/sidebar/sidebar.component';
 export * from './lib/ui/header/header.component';
 export * from './lib/ui/transaction-layout/transaction-layout.component';
+export * from './lib/ui/label/label.component';
 export * from './lib/utils/route.utils';
 export * from './lib/utils/state.utils';
 export * from './lib/services/service-registry.service';

@@ -10,12 +10,14 @@ import { BaseComponent } from '@frontend/shared';
   styleUrls: ['./dashboard-start.component.scss'],
 })
 export class DashboardStartComponent extends BaseComponent implements OnInit {
+  
   override ngOnInit() {
     super.ngOnInit();
   }
 
   goToMoneyTransfer() {
-    this.flowService.navigate('money-transfer');
+    this.State.accountType = "CAS";
+    this.flowService.navigate('money-transfer', true);
   }
   goToAccounts() {
     this.flowService.navigate('all-account');

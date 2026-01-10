@@ -3,5 +3,17 @@
     <h2 class="h5 mb-1">{{ title }}</h2>
   </div>
 
-  <!-- Add your start logic here -->
+  <!-- 1) State proxy -> flowService.get(...) called from template (reactive in this project) -->
+  <lib-label [text]="'State (template) : ' + (State.transferRequesttttt?.iban ?? '-')"></lib-label>
+
+  <!-- 2) select(): Signal (reactive) -->
+  <lib-label [text]="'select() signal : ' + (transferRequestttttSig()?.iban ?? '-')"></lib-label>
+
+  <!-- 3) get(): snapshot (non-reactive) -->
+  <lib-label [text]="'get() snapshot : ' + (transferRequestttttSnapshot?.iban ?? '-')"></lib-label>
+
+  <div class="col-12 col-md-6">
+    <button class="btn btn-outline-primary w-100" (click)="changeit()">change it</button>
+  </div>
+  
 </div>
