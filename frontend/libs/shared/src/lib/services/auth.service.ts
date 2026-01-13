@@ -3,18 +3,21 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthControllerService } from '../api/api/auth-controller.service';
+import { BaseAppService } from '../base/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService extends BaseAppService {
   private readonly TOKEN_KEY = 'auth_token';
 
   // Session-bound flag (in-memory). It resets on full page reload,
   // preventing users from continuing by manually entering URLs.
   private sessionAuthenticated = false;
 
-  constructor(private authController: AuthControllerService, private router: Router) {}
+  constructor(private authController: AuthControllerService, private router: Router) {
+    super();
+  }
 
   login(credentials: { [key: string]: string }): Observable<{ [key: string]: string }> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

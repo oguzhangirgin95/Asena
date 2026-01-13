@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { BaseAppService } from '../base/base.service';
 
 export type AsenaEnvironmentName = 'local' | 'dev' | 'test' | 'prod' | string;
 
@@ -31,10 +32,12 @@ export interface AsenaEnvironmentConfig {
 }
 
 @Injectable({ providedIn: 'root' })
-export class EnvironmentConfigService {
+export class EnvironmentConfigService extends BaseAppService {
   private config: AsenaEnvironmentConfig | null = null;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+    super();
+  }
 
   async load(): Promise<void> {
     if (this.config) return;

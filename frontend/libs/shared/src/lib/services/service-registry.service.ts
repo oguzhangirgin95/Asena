@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Type, APP_INITIALIZER, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { APIS } from '../api/index';
+import { BaseAppService } from '../base/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceRegistry {
+export class ServiceRegistry extends BaseAppService {
   private services = new Map<string, Type<any>>();
 
   register(name: string, service: Type<any>) {

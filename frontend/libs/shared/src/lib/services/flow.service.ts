@@ -6,6 +6,7 @@ import { ValidationService, ValidationRuleConfig } from './validation.service';
 import { ServiceRegistry } from './service-registry.service';
 import { ResourceService } from './resource.service';
 import { TRANSACTION_PATH_MAP, TransactionPathMap } from '../tokens/transaction-paths.token';
+import { BaseAppService } from '../base/base.service';
 
 export interface ServiceConfig {
   serviceName: string;
@@ -50,7 +51,7 @@ export interface FlowConfig {
 @Injectable({
   providedIn: 'root'
 })
-export class FlowService {
+export class FlowService extends BaseAppService {
   private state: Map<string, any> = new Map();
 
   // Keep state storage as a Map, but expose updates to Angular's reactivity system.
@@ -78,6 +79,7 @@ export class FlowService {
   public currentStepIndex$ = this.currentStepIndexSubject.asObservable();
 
   constructor() {
+    super();
     // State is now in-memory only
   }
 

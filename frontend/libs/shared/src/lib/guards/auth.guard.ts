@@ -9,12 +9,15 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { BaseAppGuard } from '../base/base.guard';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(private authService: AuthService, private router: Router) {}
+export class AuthGuard extends BaseAppGuard implements CanActivate, CanActivateChild {
+  constructor(private authService: AuthService, private router: Router) {
+    super();
+  }
 
   canActivate(
     _route?: ActivatedRouteSnapshot,

@@ -3,11 +3,12 @@ import { ResourceControllerService } from '../api';
 import { catchError, map } from 'rxjs/operators';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { ResourceItemDto } from '../api/model/resource-item-dto';
+import { BaseAppService } from '../base/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ResourceService {
+export class ResourceService extends BaseAppService {
   private generalResources = signal<Record<string, string>>({});
   private transactionResources = signal<Record<string, string>>({});
   public currentLanguage = signal<string>('tr');
@@ -21,6 +22,7 @@ export class ResourceService {
   private txInFlightKey?: string;
 
   constructor(private resourceApi: ResourceControllerService) {
+    super();
     const savedLang = localStorage.getItem('language');
     if (savedLang) {
       this.currentLanguage.set(savedLang);

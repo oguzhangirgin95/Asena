@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import validationRules from '../config/validation.json';
 import { ResourceService } from './resource.service';
+import { BaseAppService } from '../base/base.service';
 
 export interface ValidationRule {
   required?: boolean;
@@ -21,12 +22,14 @@ export interface ValidationRuleConfig {
 @Injectable({
   providedIn: 'root'
 })
-export class ValidationService {
+export class ValidationService extends BaseAppService {
   private rules: ValidationConfig = validationRules as ValidationConfig;
   private currentRules: ValidationRuleConfig[] = [];
   private customValidationFn: (() => boolean) | null = null;
 
-  constructor(private resourceService: ResourceService) {}
+  constructor(private resourceService: ResourceService) {
+    super();
+  }
 
   setRules(rules: ValidationRuleConfig[]) {
     this.currentRules = rules || [];
