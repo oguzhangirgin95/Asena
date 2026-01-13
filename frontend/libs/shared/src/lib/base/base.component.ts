@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FlowService, FlowConfig } from '../services/flow.service';
 import { LoggerService } from '../services/logger.service';
 import { ValidationService } from '../services/validation.service';
+import { BaseAppService } from './base.service';
 
 @Component({
   template: ''
@@ -22,6 +23,10 @@ export abstract class BaseComponent implements OnInit, OnDestroy {
       return true;
     }
   });
+
+  public constructor() {
+    BaseAppService.ensureSsrCompat();
+  }
 
   ngOnInit(): void {
     this.logger.log(`Initializing ${this.constructor.name}`);
