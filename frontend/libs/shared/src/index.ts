@@ -1,3 +1,5 @@
+import './lib/base/ssr-compat.init';
+
 export * from './lib/shared/shared';
 export * from './lib/services/flow.service';
 export * from './lib/services/validation.service';

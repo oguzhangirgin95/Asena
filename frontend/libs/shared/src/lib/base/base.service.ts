@@ -40,6 +40,12 @@ export abstract class BaseAppService {
 		const g = globalThis as any;
 		const noop = () => undefined;
 
+		// Mark that we're running under SSR with a compatibility shim.
+		// This lets app code reliably differentiate real browser vs shimmed "window".
+		g.__ASENA_SSR_SHIM__ = true;
+		g.__ASENA_IS_SERVER__ = true;
+		g.__ASENA_IS_BROWSER__ = false;
+
 		// atob/btoa shims (some libs expect them).
 		const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 		const btoaFallback = (input: string): string => {
@@ -200,12 +206,15 @@ export abstract class BaseAppService {
 		g.window.addEventListener ??= () => undefined;
 		g.window.removeEventListener ??= () => undefined;
 		g.window.requestAnimationFrame ??= (cb: (...args: any[]) => void) => {
-			try {
-				cb(Date.now());
-			} catch {
-				// ignore
-			}
-			return 0;
+			// IMPORTANT: do not call the callback synchronously on the server.
+			// Some libs schedule recursive rAF loops; synchronous execution can lead to tight loops/hangs.
+			return setTimeout(() => {
+				try {
+					cb(Date.now());
+				} catch {
+					// ignore
+				}
+			}, 16) as unknown as number;
 		};
 		g.window.cancelAnimationFrame ??= () => undefined;
 		g.window.matchMedia ??= () => ({
@@ -290,6 +299,33 @@ export abstract class BaseAppService {
 		// If fetch isn't available in the SSR runtime, provide a minimal stub to avoid ReferenceError.
 		g.fetch ??= (_input: unknown, _init?: unknown) =>
 			Promise.reject(new Error('fetch is not available in this SSR runtime'));
+
+		// SSR safety: wrap native fetch with a default timeout so SSR doesn't hang forever
+		// on unreachable backends (common during initial SSR rollout).
+		if (typeof g.fetch === 'function' && g.__ASENA_FETCH_WRAPPED__ !== true) {
+			const originalFetch = g.fetch.bind(g);
+			g.fetch = (input: unknown, init?: any) => {
+				const options = init ?? {};
+				if (options.signal) {
+					return originalFetch(input, options);
+				}
+
+				const controller = new g.AbortController();
+				const timeoutMs = 5000;
+				const timeoutId = setTimeout(() => {
+					try {
+						controller.abort();
+					} catch {
+						// ignore
+					}
+				}, timeoutMs);
+
+				return originalFetch(input, { ...options, signal: controller.signal }).finally(() => {
+					clearTimeout(timeoutId);
+				});
+			};
+			g.__ASENA_FETCH_WRAPPED__ = true;
+		}
 		g.AbortController ??= class {
 			signal = { aborted: false, addEventListener: noop, removeEventListener: noop };
 			abort() {
@@ -357,5 +393,33 @@ export abstract class BaseAppService {
 			g.$ = chainable;
 			g.jQuery = chainable;
 		}
+	}
+
+	/** True only in a real browser runtime (not SSR shim). */
+	public static get isBrowser(): boolean {
+		const g = globalThis as any;
+		return typeof window !== 'undefined' && g.__ASENA_SSR_SHIM__ !== true;
+	}
+
+	/** True when running on server (SSR), including shimmed globals. */
+	public static get isServer(): boolean {
+		return !BaseAppService.isBrowser;
+	}
+
+	/**
+	 * Run code only in the browser. In SSR it is skipped.
+	 * Use this instead of `if (typeof window !== 'undefined')` because the SSR shim defines `window`.
+	 */
+	public static whenBrowser(fn: () => void): void {
+		if (BaseAppService.isBrowser) fn();
+	}
+
+	public static async whenBrowserAsync<T>(fn: () => Promise<T>): Promise<T | undefined> {
+		if (!BaseAppService.isBrowser) return undefined;
+		return await fn();
+	}
+
+	public static whenServer(fn: () => void): void {
+		if (BaseAppService.isServer) fn();
 	}
 }

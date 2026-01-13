@@ -28,6 +28,26 @@ export abstract class BaseComponent implements OnInit, OnDestroy {
     BaseAppService.ensureSsrCompat();
   }
 
+  protected get isBrowser(): boolean {
+    return BaseAppService.isBrowser;
+  }
+
+  protected get isServer(): boolean {
+    return BaseAppService.isServer;
+  }
+
+  protected whenBrowser(fn: () => void): void {
+    BaseAppService.whenBrowser(fn);
+  }
+
+  protected whenServer(fn: () => void): void {
+    BaseAppService.whenServer(fn);
+  }
+
+  protected async whenBrowserAsync<T>(fn: () => Promise<T>): Promise<T | undefined> {
+    return await BaseAppService.whenBrowserAsync(fn);
+  }
+
   ngOnInit(): void {
     this.logger.log(`Initializing ${this.constructor.name}`);
     

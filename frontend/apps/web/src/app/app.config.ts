@@ -1,14 +1,37 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  APP_INITIALIZER,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
-import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor, Configuration, provideServiceRegistry, ResourceService, EnvironmentConfigService, TRANSACTION_PATH_MAP } from '@frontend/shared';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
+import {
+  AuthInterceptor,
+  BaseAppService,
+  Configuration,
+  provideServiceRegistry,
+  ResourceService,
+  EnvironmentConfigService,
+  TRANSACTION_PATH_MAP,
+} from '@frontend/shared';
+import {
+  provideClientHydration,
+  withIncrementalHydration,
+} from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // Hybrid hydration (incremental hydration): enables @defer hydrate triggers and more SSR-friendly boot.
+    provideClientHydration(withIncrementalHydration()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(appRoutes),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideServiceRegistry(),
     {
       provide: TRANSACTION_PATH_MAP,
@@ -28,24 +51,31 @@ export const appConfig: ApplicationConfig = {
 
         // loan
         'apply-vehicle-credit': 'loan/apply-vehicle-credit',
-      }
+      },
     },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: Configuration,
-      useFactory: () => new Configuration({ basePath: '' })
+      useFactory: () => new Configuration({ basePath: '' }),
     },
     {
       provide: APP_INITIALIZER,
       useFactory:
-        (env: EnvironmentConfigService, apiConfig: Configuration, resourceService: ResourceService) =>
+        (
+          env: EnvironmentConfigService,
+          apiConfig: Configuration,
+          resourceService: ResourceService,
+        ) =>
         async () => {
+          // Hybrid hydration / SSR: do not run browser-only initialization on the server.
+          // NOTE: `typeof window !== 'undefined'` is not reliable because SSR shim defines `window`.
+          if (!BaseAppService.isBrowser) return;
           await env.load();
           apiConfig.basePath = env.getApiBasePath();
           await resourceService.ensureGeneralLoaded();
         },
       deps: [EnvironmentConfigService, Configuration, ResourceService],
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 };
