@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BaseComponent, AuthService, ResourcePipe, ResourceService } from '@frontend/shared';
+import { BaseComponent, AuthService, ResourcePipe, ResourceService, AutofocusDirective, TrimRequiredValidatorDirective } from '@frontend/shared';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'asena-login-start',
   standalone: true,
-  imports: [CommonModule, FormsModule, ResourcePipe],
+  imports: [CommonModule, FormsModule, ResourcePipe, AutofocusDirective, TrimRequiredValidatorDirective],
   templateUrl: './login-start.component.html',
   styleUrls: ['./login-start.component.scss'],
 })

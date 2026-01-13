@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  ErrorHandler,
   provideBrowserGlobalErrorListeners,
   APP_INITIALIZER,
 } from '@angular/core';
@@ -15,6 +16,7 @@ import {
   AuthInterceptor,
   BaseAppService,
   Configuration,
+  GlobalErrorHandler,
   provideServiceRegistry,
   ResourceService,
   EnvironmentConfigService,
@@ -33,6 +35,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideServiceRegistry(),
+    // Example handler: centralize unhandled error reporting/logging.
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     {
       provide: TRANSACTION_PATH_MAP,
       useValue: {

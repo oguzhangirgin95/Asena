@@ -7,7 +7,7 @@
           <div class="text-body-secondary">{{ 'LOGIN_SUBTITLE | Sign in to continue' | resource }}</div>
         </div>
 
-        <form (ngSubmit)="onLogin()" class="vstack gap-3">
+        <form (ngSubmit)="onLogin()" class="vstack gap-3" #loginForm="ngForm">
           <div>
             <label for="language" class="form-label">{{ 'LANGUAGE | Language' | resource }}</label>
             <select
@@ -28,9 +28,15 @@
               id="username"
               name="username"
               [(ngModel)]="credentials.username"
+              #usernameModel="ngModel"
+              appAutofocus
+              appTrimRequired
               class="form-control"
               autocomplete="username"
             />
+            <div *ngIf="usernameModel.invalid && (usernameModel.dirty || usernameModel.touched)" class="text-danger small mt-1">
+              Username is required.
+            </div>
           </div>
 
           <div>
