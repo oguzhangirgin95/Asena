@@ -1,0 +1,57 @@
+.shell {
+	min-height: 100dvh;
+	background:
+		radial-gradient(1200px 500px at 20% -10%, rgba(0, 123, 255, 0.12), transparent 60%),
+		radial-gradient(900px 400px at 90% 10%, rgba(40, 167, 69, 0.10), transparent 55%),
+		#f7f7fb;
+}
+
+.topbar {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 12px 18px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	background: rgba(255, 255, 255, 0.75);
+	backdrop-filter: blur(8px);
+}
+
+.brand {
+	font-weight: 750;
+	letter-spacing: 0.2px;
+}
+
+.nav {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+
+	a {
+		padding: 8px 10px;
+		border-radius: 10px;
+		text-decoration: none;
+		color: inherit;
+		opacity: 0.85;
+		border: 1px solid transparent;
+	}
+
+	a:hover {
+		opacity: 1;
+		border-color: rgba(0, 0, 0, 0.10);
+		background: rgba(255, 255, 255, 0.65);
+	}
+
+	a.active {
+		opacity: 1;
+		border-color: rgba(0, 0, 0, 0.12);
+		background: rgba(255, 255, 255, 0.85);
+	}
+}
+
+.content {
+	padding-bottom: 24px;
+}

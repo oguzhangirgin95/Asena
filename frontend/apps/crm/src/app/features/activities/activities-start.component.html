@@ -1,0 +1,19 @@
+<div class="page">
+  <header class="header">
+    <h1>Aktiviteler</h1>
+    <p>Günlük yapılacaklar ve geçmiş.</p>
+  </header>
+
+  <section class="timeline">
+    @for (item of items; track item.at) {
+      <div class="row">
+        <div class="time">{{ item.at }}</div>
+        <div class="dot" aria-hidden="true"></div>
+        <div class="card">
+          <div class="title">{{ item.title }}</div>
+          <div class="detail">{{ item.detail }}</div>
+        </div>
+      </div>
+    }
+  </section>
+</div>

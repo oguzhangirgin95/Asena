@@ -6,6 +6,8 @@
     "sync-env": "node scripts/sync-environment.js",
     "prestart": "npm run sync-env",
     "start": "nx serve web",
+    "prestart:crm": "npm run sync-env",
+    "start:crm": "nx serve crm",
     "generate-api": "node scripts/generate-api.js"
   },
   "private": true,

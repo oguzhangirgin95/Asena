@@ -32,7 +32,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         List<String> allowedOrigins = envLoader.get().cors != null ? envLoader.get().cors.allowedOrigins : null;
         if (allowedOrigins == null || allowedOrigins.isEmpty()) {
-            allowedOrigins = List.of("http://localhost:4200");
+            allowedOrigins = List.of(
+                "http://localhost:4200",
+                "http://127.0.0.1:4200",
+                "http://localhost:4300",
+                "http://127.0.0.1:4300"
+            );
         }
 
         CorsConfiguration config = new CorsConfiguration();
@@ -53,7 +58,14 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/resources/**").permitAll()
+                .requestMatchers(
+                    "/",
+                    "/api/auth/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/api/resources/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

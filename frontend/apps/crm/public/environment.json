@@ -1,0 +1,21 @@
+{
+  "environment": "local",
+  "frontend": {
+    "baseUrl": "http://localhost:4200"
+  },
+  "backend": {
+    "baseUrl": "http://localhost:8080"
+  },
+  "api": {
+    "basePath": ""
+  },
+  "security": {
+    "jwt": {
+      "expirationMs": 3600000,
+      "secret": "CHANGE_ME_TO_A_LONG_RANDOM_SECRET_AT_LEAST_32_CHARS"
+    }
+  },
+  "cors": {
+    "allowedOrigins": ["http://localhost:4200"]
+  }
+}
