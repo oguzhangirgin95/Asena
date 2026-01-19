@@ -27,8 +27,24 @@ export class LoginStartComponent extends BaseComponent implements OnInit {
     super();
   }
 
+  get crmMessage(): string | null {
+    const value = this.SharedState.crmMessage;
+    if (value === null || value === undefined) return null;
+    const s = String(value).trim();
+    return s ? s : null;
+  }
+
+  get crossAppSessionId(): string | null {
+    const value = this.SharedState.crossAppSessionId;
+    if (value === null || value === undefined) return null;
+    const s = String(value).trim();
+    return s ? s : null;
+  }
+
   override ngOnInit() {
     super.ngOnInit();
+    // Do not restrict origins here to avoid localhost/127.0.0.1 mismatches in dev.
+    this.enableCrossAppStateReceiver();
   }
 
   changeLanguage(lang: string) {

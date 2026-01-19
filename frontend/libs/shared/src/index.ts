@@ -4,6 +4,7 @@ export * from './lib/shared/shared';
 export * from './lib/services/flow.service';
 export * from './lib/services/validation.service';
 export * from './lib/services/logger.service';
+export * from './lib/services/cross-app-state.service';
 export * from './lib/base/base.service';
 export * from './lib/base/base';
 export * from './lib/base/base.guard';

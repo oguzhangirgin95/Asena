@@ -1,1 +1,13 @@
+:host {
+	display: block;
+}
+
+.crm-message {
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px dashed rgba(0, 0, 0, 0.2);
+	background: rgba(13, 110, 253, 0.06); // bootstrap primary tint
+	color: rgba(0, 0, 0, 0.85);
+	font-size: 0.9rem;
+}
 

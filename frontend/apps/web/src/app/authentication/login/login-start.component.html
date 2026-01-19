@@ -5,6 +5,10 @@
         <div class="mb-3">
           <h1 class="h4 mb-1">{{ 'LOGIN_TITLE | Login' | resource }}</h1>
           <div class="text-body-secondary">{{ 'LOGIN_SUBTITLE | Sign in to continue' | resource }}</div>
+
+          <div *ngIf="crmMessage" class="crm-message mt-3">
+            CRM'den gelen state: <strong>{{ crmMessage }}</strong>
+          </div>
         </div>
 
         <form (ngSubmit)="onLogin()" class="vstack gap-3" #loginForm="ngForm">
